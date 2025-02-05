@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Sports Score</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #222;
+        }
+        .scoreboard {
+            text-align: center;
+            color: white;
+            background-color: #333;
+            padding: 30px;
+            border-radius: 10px;
+        }
+        .scoreboard h1 {
+            margin-bottom: 20px;
+        }
+        .team-scores {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .team h2 {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="scoreboard">
+            <h1>Live Sports Score</h1>
+            <div class="team-scores">
+                <div class="team">
+                    <h2>Team A</h2>
+                    <p id="team-a-score">0</p>
+                </div>
+                <div class="team">
+                    <h2>Team B</h2>
+                    <p id="team-b-score">0</p>
+                </div>
+            </div>
+            <button class="btn btn-warning mt-3" onclick="updateScores()">Update Scores</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let teamAScore = 0;
+        let teamBScore = 0;
+
+        function updateScores() {
+            teamAScore = Math.floor(Math.random() * 10);
+            teamBScore = Math.floor(Math.random() * 10);
+
+            document.getElementById('team-a-score').textContent = teamAScore;
+            document.getElementById('team-b-score').textContent = teamBScore;
+        }
+    </script>
+</body>
+</html>
