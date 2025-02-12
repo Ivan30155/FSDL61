@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flappy Bird Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: skyblue;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        .game-container {
+            position: relative;
+            width: 400px;
+            height: 500px;
+            background-color: lightblue;
+            border: 2px solid black;
+            overflow: hidden;
+        }
+        .bird {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: rgb(255, 0, 0);
+            border-radius: 50%;
+            top: 200px;
+            left: 50px;
+        }
+        .obstacle {
+            position: absolute;
+            width: 50px;
+            height: 200px;
+            background-color: green;
+            bottom: 0;
+        }
+        .top-obstacle {
+            top: 0;
+        }
+        .score {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="score">Score: <span id="score">0</span></div>
+        <div class="bird" id="bird"></div>
+    </div>
+
+    <script>
+        const bird = document.getElementById("bird");
+        const gameContainer = document.querySelector(".game-container");
+        const scoreDisplay = document.getElementById("score");
+        let birdY = 200;
+        let gravity = 2;
+        let velocity = 0;
+        let isGameOver = false;
+        let score = 0;
+
+        function jump() {
+            if (!isGameOver) {
+                velocity = -8;
+            }
+        }
+
+        function createObstacle() {
+            let obstacle = document.createElement("div");
+            let topObstacle = document.createElement("div");
+            obstacle.classList.add("obstacle");
+            topObstacle.classList.add("obstacle", "top-obstacle");
+
+            let obstacleHeight = Math.random() * 150 + 100;
+            obstacle.style.height = obstacleHeight + "px";
+            topObstacle.style.height = (400 - obstacleHeight - 150) + "px";
+
+            obstacle.style.left = "400px";
+            topObstacle.style.left = "400px";
+
+            gameContainer.appendChild(obstacle);
+            gameContainer.appendChild(topObstacle);
+
+            let moveObstacle = setInterval(() => {
+                let obstacleLeft = parseInt(window.getComputedStyle(obstacle).getPropertyValue("left"));
+                let birdBottom = parseInt(window.getComputedStyle(bird).getPropertyValue("top"));
+                let topObstacleBottom = parseInt(window.getComputedStyle(topObstacle).getPropertyValue("height"));
+
+                if (obstacleLeft > -50) {
+                    obstacle.style.left = (obstacleLeft - 5) + "px";
+                    topObstacle.style.left = (obstacleLeft - 5) + "px";
+                } else {
+                    gameContainer.removeChild(obstacle);
+                    gameContainer.removeChild(topObstacle);
+                    clearInterval(moveObstacle);
+                    score++;
+                    scoreDisplay.innerText = score;
+                }
+
+                if (obstacleLeft < 80 && obstacleLeft > 20 && (birdBottom > 500 - obstacleHeight || birdBottom < topObstacleBottom)) {
+                    gameOver();
+                }
+            }, 30);
+        }
+
+        function gameOver() {
+            isGameOver = true;
+            alert(`Game Over! Your Score: ${score}`);
+            location.reload();
+        }
+
+        function update() {
+            if (!isGameOver) {
+                velocity += gravity;
+                birdY += velocity;
+                bird.style.top = birdY + "px";
+
+                if (birdY > 470 || birdY < 0) {
+                    gameOver();
+                }
+            }
+        }
+
+        setInterval(update, 30);
+        setInterval(createObstacle, 2000);
+        document.addEventListener("keydown", (e) => {
+            if (e.code === "Space") {
+                jump();
+            }
+        });
+    </script>
+</body>
+</html>

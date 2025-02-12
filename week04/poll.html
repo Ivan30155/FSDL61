@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realistic Polling System</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background-color: #eef2f3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .poll {
+            max-width: 450px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .poll h2 {
+            color: #333;
+        }
+        .options {
+            margin-top: 15px;
+        }
+        .option {
+            display: block;
+            width: 100%;
+            margin: 8px 0;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+        }
+        .option:hover {
+            transform: scale(1.05);
+        }
+        .option:active {
+            animation: voteEffect 0.3s ease;
+        }
+        @keyframes voteEffect {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        #results {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+        #results li {
+            background: #f3f3f3;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #555;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-in forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .reset-button {
+            margin-top: 20px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background: #ff4d4d;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        .reset-button:hover {
+            background: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="poll">
+        <h2>Which cricketer do you like?</h2>
+        <div class="options">
+            <button class="option" onclick="vote('Rohit Sharma')">Rohit Sharma</button>
+            <button class="option" onclick="vote('Virat Kohli')">Virat Kohli</button>
+            <button class="option" onclick="vote('Hardik Pandya')">Hardik Pandya</button>
+            <button class="option" onclick="vote('KL Rahul')">KL Rahul</button>
+            <button class="option" onclick="vote('Shubman Gill')">Shubman Gill</button>
+        </div>
+        <h3>Results:</h3>
+        <ul id="results"></ul>
+        <button class="reset-button" onclick="resetPoll()">Reset Poll</button>
+    </div>
+
+    <script>
+        const pollResults = JSON.parse(localStorage.getItem('pollResults')) || { "Rohit Sharma": 0, "Virat Kohli": 0, "Hardik Pandya": 0, "KL Rahul": 0, "Shubman Gill": 0 };
+        function vote(option) {
+            pollResults[option]++;
+            localStorage.setItem('pollResults', JSON.stringify(pollResults));
+            updateResults();
+        }
+        function updateResults() {
+            const resultsList = document.getElementById('results');
+            resultsList.innerHTML = '';
+            for (let option in pollResults) {
+                resultsList.innerHTML += `<li><strong>${option}</strong>: ${pollResults[option]} votes</li>`;
+            }
+        }
+        function resetPoll() {
+            localStorage.removeItem('pollResults');
+            location.reload();
+        }
+        updateResults();
+    </script>
+</body>
+</html>

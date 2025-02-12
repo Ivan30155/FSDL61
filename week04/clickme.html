@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click Me Game</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            margin-top: 50px;
+            overflow: hidden;
+            position: relative;
+            height: 100vh;
+        }
+        button {
+            font-size: 20px;
+            padding: 15px;
+            border: none;
+            background: #28a745;
+            color: white;
+            cursor: pointer;
+            border-radius: 8px;
+            position: absolute;
+            transition: transform 0.1s;
+        }
+        button:active {
+            transform: scale(1.1);
+        }
+        h1, h2, h3 {
+            position: relative;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <h1>Catch the Button!</h1>
+    <h2>Time Left: <span id="timer">30</span> sec</h2>
+    <h2>Score: <span id="score">0</span></h2>
+    <button id="clickMe" onclick="increaseScore()">Click Me!</button>
+
+    <script>
+        let score = 0;
+        let timeLeft = 30;
+        const button = document.getElementById("clickMe");
+        const timerDisplay = document.getElementById("timer");
+
+        function increaseScore() {
+            if (timeLeft > 0) {
+                score++;
+                document.getElementById("score").innerText = score;
+                moveButton();
+            }
+        }
+
+        function moveButton() {
+            const x = Math.random() * (window.innerWidth - button.offsetWidth);
+            const y = Math.random() * (window.innerHeight - button.offsetHeight);
+            button.style.left = `${x}px`;
+            button.style.top = `${y}px`;
+        }
+
+        function startTimer() {
+            const timer = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    timerDisplay.innerText = timeLeft;
+                } else {
+                    clearInterval(timer);
+                    button.style.display = "none";
+                    alert(`Time's up! Your final score is ${score}`);
+                }
+            }, 1000);
+        }
+
+        moveButton(); 
+        startTimer();
+    </script>
+</body>
+</html>
