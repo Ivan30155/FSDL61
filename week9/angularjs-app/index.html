@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="en" ng-app="meditationApp">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zen Vibes - Meditation</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular-route.min.js"></script>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-image: url('https://images.unsplash.com/photo-1558981003-03c2b3b43c28');
+      background-size: cover;
+      background-position: center;
+      backdrop-filter: blur(3px);
+      color: white;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+
+    input[type="text"], input[type="password"] {
+      padding: 10px;
+      margin: 10px;
+      border: none;
+      border-radius: 10px;
+      width: 250px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      background-color: #f48fb1;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .content {
+      padding: 50px;
+    }
+  </style>
+</head>
+
+<body>
+  <div ng-view></div>
+
+  <script>
+    var app = angular.module('meditationApp', ['ngRoute']);
+
+    app.config(function($routeProvider) {
+      $routeProvider
+        .when('/', {
+          template: `
+            <div class='container'>
+              <h1>Welcome to Zen Vibes</h1>
+              <p>Find your inner peace 🌸</p>
+              <form ng-submit="login()">
+                <input type="text" ng-model="username" placeholder="Username" required><br>
+                <input type="password" ng-model="password" placeholder="Password" required><br>
+                <button type="submit">Login</button>
+              </form>
+              <p style="margin-top: 20px;">New here? Just enter any name to begin.</p>
+            </div>
+          `,
+          controller: 'LoginController'
+        })
+        .when('/home', {
+          template: `
+            <div class='container'>
+              <h1>Hello, {{ user }} 👋</h1>
+              <p class="content">Take a deep breath...<br>Listen to the wind through the cherry blossoms 🍃<br>Your journey to peace starts here.</p>
+            </div>
+          `,
+          controller: 'HomeController'
+        })
+        .otherwise({ redirectTo: '/' });
+    });
+
+    app.controller('LoginController', function($scope, $location) {
+      $scope.login = function() {
+        if ($scope.username && $scope.password) {
+          sessionStorage.setItem('user', $scope.username);
+          $location.path('/home');
+        } else {
+          alert("Please enter your username and password.");
+        }
+      }
+    });
+
+    app.controller('HomeController', function($scope) {
+      $scope.user = sessionStorage.getItem('user') || 'Zen Guest';
+    });
+  </script>
+</body>
+
+</html>
